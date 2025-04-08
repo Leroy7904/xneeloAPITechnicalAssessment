@@ -1,0 +1,175 @@
+{
+	"info": {
+		"_postman_id": "d0cdc1e5-9356-49bb-8867-bb55f41df045",
+		"name": "CatFactNinja",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "10677143"
+	},
+	"item": [
+		{
+			"name": "RandomFact",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Verify we are getting the response code  200",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"//Validate that we are getting a fact",
+							"pm.test(\"Checking that a fact is present and is a string\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.fact).to.be.a('string');",
+							"});",
+							"//additional checks",
+							"pm.test(\"Fact should not contain the word 'dog'\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.fact).to.not.include(\"dog\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://catfact.ninja/fact",
+					"protocol": "https",
+					"host": [
+						"catfact",
+						"ninja"
+					],
+					"path": [
+						"fact"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "FactList",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Verify the response code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Validate the JSON response body.\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.data).to.be.an('array');",
+							"    pm.expect(jsonData.data.length).to.be.greaterThan(0);  // Ensure there is at least one fact",
+							"    pm.expect(jsonData.data[0]).to.have.property('fact').that.is.a('string');",
+							"    pm.expect(jsonData.data[0]).to.have.property('length').that.is.a('number');",
+							"});",
+							"",
+							"pm.test(\"Verify the fact count is within valid range\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.data.length).to.be.within(10, 100);  // Ensure the number of facts is between 1 and 50",
+							"});",
+							"",
+							"pm.test(\"Verify each fact is a string\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    jsonData.data.forEach(function (fact) {",
+							"        pm.expect(fact.fact).to.be.a('string');",
+							"    });",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://catfact.ninja/facts",
+					"protocol": "https",
+					"host": [
+						"catfact",
+						"ninja"
+					],
+					"path": [
+						"facts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "BrazilianBreed",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Verify status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Verify Brazilian Shorthair details\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    const breed = jsonData.data.find(b => b.breed === \"Brazilian Shorthair\");",
+							"",
+							"    pm.expect(breed).to.not.be.undefined;",
+							"    pm.expect(breed.country).to.eql(\"Brazil\");",
+							"    pm.expect(breed.origin).to.eql(\"Natural\");",
+							"    pm.expect(breed.coat).to.eql(\"Short\");",
+							"    pm.expect(breed.pattern).to.eql(\"All\");",
+							"",
+							"    console.log(\"Brazilian Shorthair breed data:\", breed);",
+							"    pm.expect(breed.country).to.eql(\"Brazil\");",
+							"    console.log(\"Country:\", breed.country);",
+							"",
+							"   });",
+							"",
+							"   pm.test(\"Checking if response time is less than 1500ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(1500);",
+							"});",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://catfact.ninja/breeds",
+					"protocol": "https",
+					"host": [
+						"catfact",
+						"ninja"
+					],
+					"path": [
+						"breeds"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
